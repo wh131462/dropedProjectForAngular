@@ -1,0 +1,102 @@
+<div class="gantt-view">
+  <ejs-gantt
+    #gantt
+    id="gantt"
+    height="100%"
+    width="100%"
+    [timezone]="timezone"
+    connectorLineBackground="#4857E2"
+    [dataSource]="data"
+    [taskFields]="taskSettings"
+    [rowHeight]="54"
+    [allowSelection]="true"
+    [treeColumnIndex]="1"
+    [allowParentDependency]="true"
+    [eventMarkers]="todayMaker"
+    [selectionSettings]="selectionSettings"
+    [splitterSettings]="splitterSettings"
+    [editSettings]="editSettings"
+    [timelineSettings]="timelineSettings"
+    [enableVirtualization]="true"
+    [allowRowDragAndDrop]="true"
+    [allowTaskbarDragAndDrop]="true"
+    [highlightWeekends]="true"
+    [enableContextMenu]="true"
+    [enablePredecessorValidation]="false"
+    [enableImmutableMode]="false"
+    [tooltipSettings]="tooltipSettings"
+    [zoomingLevels]="customZoomingLevels"
+    [contextMenuItems]="contextMenu"
+    [autoFocusTasks]="false"
+    (splitterResized)="onResized($event)"
+    (onTaskbarClick)="onTaskBarClick($event)"
+    (contextMenuClick)="contextMenuClick($event)"
+    (contextMenuOpen)="contextMenuOpen($event)"
+    (rowDragStart)="onRowDragStart($event)"
+    (rowDrop)="onRowDrop($event)"
+    (actionBegin)="actionBegin($event)"
+    (actionComplete)="actionComplete($event)"
+    (actionFailure)="actionFailure($event)"
+    (recordDoubleClick)="recordDoubleClick($event)"
+    (taskbarEditing)="onTaskbarEditing($event)"
+    (wheel)='onMouseWheel($event)'
+    (mousedown)='onMouseDown($event)'
+    (mousemove)='onMouseMove($event)'
+    (mouseup)='onMouseUp($event)'
+  >
+    <e-columns>
+      <e-column field='id' headerText='id' [visible]="false"></e-column>
+      <e-column field='title' headerText='任务名称' textAlign="left" ></e-column>
+      <e-column field='leaders' headerText='负责人'>
+        <ng-template #template let-data>
+          <div class="leaders">
+            <ng-container *ngFor="let leader of data.leaders">
+              <img src="http://face.jinqidongli.com/{{leader.id}}/{{leader.id}}.jpg" alt="">
+            </ng-container>
+          </div>
+        </ng-template>
+      </e-column>
+      <e-column field='status_' headerText='状态'>
+        <ng-template #template let-data>
+          {{data.status_}}
+        </ng-template>
+      </e-column>
+      <e-column field='tags' headerTextAlign="center" headerText='标签' textAlign="center" [style.width]="'fit-content'">
+        <ng-template #template let-data>
+          <div class="tags">
+            <ng-container *ngFor="let tag of data.tags">
+              <div class="tag" style="color:{{tag.color}};background:#FFF;">{{tag.label}}</div>
+            </ng-container>
+          </div>
+        </ng-template>
+      </e-column>
+      <e-column field='startTime' headerText='开始日期' ></e-column>
+      <e-column field='stopTime' headerText='结束日期' ></e-column>
+    </e-columns>
+    <ng-template #parentTaskbarTemplate let-data>
+      <div class="taskbar" [ngClass]="[mode]">
+      </div>
+    </ng-template>
+    <ng-template #taskbarTemplate let-data>
+      <div class="taskbar" [ngClass]="[mode]">
+      </div>
+    </ng-template>
+
+    <ng-template #milestoneTemplate>
+      <div class="taskbar" [ngClass]="[mode]"></div>
+    </ng-template>
+    <ng-template #labelSettingsLeftLabel let-data>
+      <div class="taskbar-label">
+        <i class="CSES cses-pre"></i>
+        <p class="date">{{data.startTime|date:"MM/dd"}}</p>
+      </div>
+    </ng-template>
+    <ng-template #labelSettingsRightLabel let-data>
+      <div class="taskbar-label">
+        <p class="date" [ngClass]="[data.isHead?'overdue':'']">{{data.stopTime|date:"MM/dd"}}</p>
+        <p class="title">{{data.title}}</p>
+        <i class="CSES cses-pre" *ngIf="data.link"></i>
+      </div>
+    </ng-template>
+  </ejs-gantt>
+</div>

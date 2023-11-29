@@ -1,0 +1,123 @@
+:host {
+  // 组件样式客制化
+  ::ng-deep .e-split-bar-hover,
+  ::ng-deep .e-split-bar-active,
+  ::ng-deep .e-split-bar {
+    background: #E6E6E6 !important;
+    width: 4px;
+  }
+  ::ng-deep .e-resize-handler{
+    color: #E6E6E6 !important;
+  }
+  // 元素客制化
+  .taskbar {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 6px;
+    border-radius: 4px;
+    background: rgba(80, 81, 249, 0.20);
+
+    &.dependency {
+      outline: 1px solid rgba(255, 153, 0, 0.41);
+      background: rgba(255, 153, 0, 0.20);
+
+      & .active {
+        background: rgba(80, 81, 249, 0.20);
+      }
+    }
+  }
+
+  .taskbar-label {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 9px;
+
+    i {
+
+    }
+
+    .progress {
+      display: inline-flex;
+      height: 20px;
+      padding: 5px 10px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      border-radius: 14px;
+      border: 1px solid #E6E6E6;
+      background: #FFF;
+      box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
+      color: #333;
+      text-align: center;
+      font-family: PingFang SC;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+
+    p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: PingFang SC;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      margin: 0;
+
+    }
+
+    .date {
+      font-size: 14px;
+    }
+
+    .title {
+      color: #999;
+      font-size: 12px;
+    }
+  }
+
+  //  自定义模板
+  .tags {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+    text-overflow: clip;
+
+    .tag {
+      white-space: nowrap;
+      border-radius: 4px;
+      display: inline-flex;
+      padding: 2px 4px;
+      justify-content: center;
+      align-items: center;
+      font-family: Inter;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: -0.2px;
+    }
+  }
+
+  .leaders {
+    display: flex;
+
+    img {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 14px;
+      border-radius: 50%;
+    }
+  }
+}
