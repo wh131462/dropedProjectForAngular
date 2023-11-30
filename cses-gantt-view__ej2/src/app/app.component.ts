@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'cses-gantt-view__ej2';
@@ -29,10 +29,10 @@ export class AppComponent {
       ],
       "status": "unfinished",
       "status_": "未完成",
-      "startTime": 1699696500000,
+      "startTime": new Date(1699696500000),
       "type": "composite",
       "type_": "普通主任务任务",
-      "stopTime": 1800042100000,
+      "stopTime":  new Date(1800042100000),
       "progress": 0
     },
   ];

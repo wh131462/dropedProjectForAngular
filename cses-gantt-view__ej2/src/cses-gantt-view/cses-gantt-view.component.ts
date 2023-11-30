@@ -1,16 +1,20 @@
 import {Component, Input, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {registerLicense, setCulture, L10n} from '@syncfusion/ej2-base';
+import {L10n, registerLicense, setCulture} from '@syncfusion/ej2-base';
 import {
-  ContextMenuClickEventArgs, ContextMenuItem, ContextMenuOpenEventArgs, EditSettings,
+  ContextMenuClickEventArgs,
+  ContextMenuOpenEventArgs,
+  EditSettings,
   Gantt,
   GanttAllModule,
-  GanttComponent,
-  IGanttData, TimelineSettings, TooltipSettings
+  IGanttData,
+  TimelineSettings,
+  TooltipSettings
 } from "@syncfusion/ej2-angular-gantt";
 import {FormsModule} from "@angular/forms";
 import {contextMenuDefault, customZoomingLevels} from "./gantt.const";
 import {zh} from "./local.zh";
+import {ScheduleMode} from "@syncfusion/ej2-gantt/src/gantt/base/enum";
 
 setCulture('zh-cn');
 
@@ -25,10 +29,6 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NHaF1cWWhIfExzWmFZfV1gdl9HZVZSQ2YuP1ZhSXx
   styleUrls: ['./cses-gantt-view.component.scss']
 })
 export class CsesGanttViewComponent {
-
-  @Input() data: any;
-  @Input() contextMenu: any = contextMenuDefault;
-
   public taskSettings: object = {
     id: 'id',
     name: 'title',
@@ -38,6 +38,25 @@ export class CsesGanttViewComponent {
     dependency: 'link',
     parentID: "parentId"
   };
+  _data:Array<any> = [];
+  @Input()
+  get data():Array<any>{
+    return this._data;
+  }
+  set data(value:Array<any>){
+    if(!value) value = [];
+    value = value.map(item=>{
+      item[this.taskSettings['startDate']] = new Date(item[this.taskSettings['startDate']]);
+      item[this.taskSettings['endDate']] = new Date(item[this.taskSettings['endDate']]);
+      return item
+    })
+    this._data = value;
+  };
+  @Input() contextMenu: any = contextMenuDefault;
+  @Input() readonly: boolean = false;
+
+  taskMode: ScheduleMode = "Custom";
+
   public splitterSettings: object = {
     columnIndex: 4
   };
@@ -203,24 +222,38 @@ export class CsesGanttViewComponent {
     }
   }
 
+  /**
+   * 屏幕拖拽实现视图滚动
+   * @private
+   */
+  // region 屏幕拖拽实现视图滚动
   private isDragging: boolean = false;
   private startX: number = 0;
+  private startY: number = 0;
 
   onMouseDown(args: any): void {
     if (args.which === 2) {
       // 鼠标中键按下，开始拖拽
       this.isDragging = true;
-      this.startX = args.clientX;
+      this.startX = args.x - this.gantt.treeGridPane.clientWidth  - 4;
+      this.startY = args.y;
+      document.body.style.setProperty("cursor", "grab", "important");
     }
   }
 
   onMouseMove(args: any): void {
     if (this.isDragging) {
       // 正在拖拽，计算横向滚动
-      const deltaX = args.clientX - this.startX;
-      console.log("move", args, args.x, this.gantt.element.scrollLeft)
-      this.gantt.element.scrollLeft = this.gantt.element.scrollLeft + deltaX
-      this.startX = args.clientX;
+      const scrollbar = this.gantt.chartPane.querySelector('.e-chart-scroll-container')
+      const {scrollLeft,scrollTop} = scrollbar;
+      // 当前位置处于屏幕的位置
+      const newLeft = args.x - this.gantt.treeGridPane.clientWidth  - 4;
+      const newTop = args.y;
+      const deltaX = newLeft - this.startX;
+      const deltaY = newTop - this.startY;
+      this.gantt.updateChartScrollOffset(scrollLeft - deltaX, scrollTop - deltaY);
+      this.startX = newLeft;
+      this.startY = newTop;
     }
   }
 
@@ -228,10 +261,10 @@ export class CsesGanttViewComponent {
     if (this.isDragging) {
       // 鼠标中键释放，停止拖拽
       this.isDragging = false;
-      console.log("jieshu")
+      document.body.style.removeProperty("cursor");
     }
   }
-
+  // endregion
 
   onResized(args: any) {
     console.log(args)

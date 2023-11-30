@@ -1,4 +1,11 @@
 :host {
+  width: 100%;
+  height: 100%;
+  display: block;
+  .gantt-view{
+    width: 100%;
+    height: 100%;
+  }
   // 组件样式客制化
   ::ng-deep .e-split-bar-hover,
   ::ng-deep .e-split-bar-active,
